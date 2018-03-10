@@ -48,3 +48,12 @@
 ;; ido
 (require 'ido)
 (ido-mode t)
+
+
+
+
+;; emacs editor
+(global-linum-mode t)
+(toggle-frame-fullscreen)
+
+
