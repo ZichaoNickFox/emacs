@@ -49,6 +49,7 @@ values."
      ;; spell-checking
      ;; syntax-checking
      ;; version-control
+     scheme
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
@@ -127,9 +128,9 @@ values."
    ;; Press <SPC> T n to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
    dotspacemacs-themes '(
-		   solarized-dark
-		   spacemacs-dark
-        spacemacs-light)
+                         solarized-dark
+                         spacemacs-dark
+                         spacemacs-light)
    ;; If non nil the cursor color matches the state color in GUI Emacs.
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
@@ -302,13 +303,15 @@ executes.
  This function is mostly useful for variables that need to be set
 before packages are loaded. If you are unsure, you should try in setting them in
 `dotspacemacs/user-config' first."
- (setq configuration-layer--elpa-archives
+  (setq package-user-dir "~/elpa")
+  (setq configuration-layer--elpa-archives
         '(;; ("melpa" . "/Users/d12frosted/Developer/d12frosted/elpa-mirror/melpa/")
           ;; ("org"   . "/Users/d12frosted/Developer/d12frosted/elpa-mirror/org/")
           ;; ("gnu"   . "/Users/d12frosted/Developer/d12frosted/elpa-mirror/gnu/")
           ("melpa" . "http://elpa.emacs-china.org/melpa/")
           ("org"   . "http://elpa.emacs-china.org/org/")
           ("gnu"   . "http://elpa.emacs-china.org/gnu/")))	
+  (linum-mode)
   )
 
 (defun dotspacemacs/user-config ()
@@ -318,6 +321,40 @@ layers configuration.
 This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
+                                      ;  (define-key evil-insert-state-map (kbd "C-c") 'evil-force-normal-state)
+  (define-key evil-normal-state-map "\M-g" (lambda()
+                                             (interactive)
+                                             (spacemacs/jump-to-definition)
+                                             (evil-scroll-line-to-center (line-number-at-pos))
+                                             ))
+  (define-key evil-normal-state-map "J" 'evil-scroll-down)
+  (define-key evil-normal-state-map "K" 'evil-scroll-up)
+  (define-key evil-normal-state-map ";" 'evil-ex)
+  (define-key evil-normal-state-map "\C-c" 'evil-force-normal-state)
+                                        ;(define-key evil-normal-state-map "\C--" 'evil-jump-backward)
+                                        ;(define-key evil-normal-state-map "\C-\=" 'evil-jump-forward)
+  ;; insert-mode
+  (define-key evil-insert-state-map "\C-c" 'evil-normal-state)
+  ;; motion-mode
+  (define-key evil-insert-state-map "\C-c" 'evil-normal-state)
+                                        ;  (global-set-key (kbd "\C-c") 'keyboard-quit)
+  (define-key global-map "\C-j" nil)
+  (define-key evil-insert-state-map "\C-j" nil)
+  ;; 在语句上使用C-j直接执行
+  (define-key evil-insert-state-map "\C-j" (lambda()
+                                             (interactive)
+                                             (eval-print-last-sexp)
+                                             )
+    )
+  (define-key evil-normal-state-map "\C-j" 'eval-print-last-sexp)
+  (with-eval-after-load 'org
+    (define-key org-mode-map "\C-j" nil)
+    )
+  (with-eval-after-load 'org
+    (define-key org-mode-map "\C-k" nil)
+    )
+
+  (setq geiser-racket-binary "~\\bin\\Racket.exe")
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
@@ -329,7 +366,7 @@ you should place your code here."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (auto-highlight-symbol auto-compile packed ace-link popup ws-butler winum volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint indent-guide hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-themes helm-swoop helm-projectile helm-mode-manager helm-make projectile pkg-info epl helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg eval-sexp-fu highlight elisp-slime-nav dumb-jump diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key ace-jump-helm-line helm helm-core which-key undo-tree hydra async aggressive-indent adaptive-wrap ace-window avy evil-unimpaired f s dash))))
+    (geiser org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download htmlize gnuplot auto-highlight-symbol auto-compile packed ace-link popup ws-butler winum volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint indent-guide hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-themes helm-swoop helm-projectile helm-mode-manager helm-make projectile pkg-info epl helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg eval-sexp-fu highlight elisp-slime-nav dumb-jump diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key ace-jump-helm-line helm helm-core which-key undo-tree hydra async aggressive-indent adaptive-wrap ace-window avy evil-unimpaired f s dash))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
