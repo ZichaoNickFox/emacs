@@ -1,1 +1,3 @@
 到新的电脑后，设置环境变量HOME即可
+
+注意修改：geiser-racket-binary

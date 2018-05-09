@@ -311,7 +311,7 @@ before packages are loaded. If you are unsure, you should try in setting them in
           ("melpa" . "http://elpa.emacs-china.org/melpa/")
           ("org"   . "http://elpa.emacs-china.org/org/")
           ("gnu"   . "http://elpa.emacs-china.org/gnu/")))	
-  (linum-mode)
+  (linum-mode t)
   )
 
 (defun dotspacemacs/user-config ()
@@ -354,7 +354,7 @@ you should place your code here."
     (define-key org-mode-map "\C-k" nil)
     )
 
-  (setq geiser-racket-binary "~\\bin\\Racket.exe")
+  (setq geiser-racket-binary (expand-file-name "D:\\Racket\\Racket.exe"))
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
