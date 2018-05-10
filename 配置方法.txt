@@ -1,3 +1,12 @@
-到新的电脑后，设置环境变量HOME即可
 
-注意修改：geiser-racket-binary
+
+windows平台配置方法
+
+1、设置环境变量HOME为emacs路径
+测试：能打开spacemacs
+
+2、将.spacemacs中geiser-racket-binary改为drracket的racket.exe的路径
+测试：SPC SPC run-racket可以进入drracket的REPL
+
+3、将ag.exe放入system32
+测试：SPC s a f可以搜索到东西

@@ -321,7 +321,7 @@ layers configuration.
 This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
-                                      ;  (define-key evil-insert-state-map (kbd "C-c") 'evil-force-normal-state)
+                                        ;  (define-key evil-insert-state-map (kbd "C-c") 'evil-force-normal-state)
   (define-key evil-normal-state-map "\M-g" (lambda()
                                              (interactive)
                                              (spacemacs/jump-to-definition)
@@ -347,6 +347,9 @@ you should place your code here."
                                              )
     )
   (define-key evil-normal-state-map "\C-j" 'eval-print-last-sexp)
+
+
+  ;; org
   (with-eval-after-load 'org
     (define-key org-mode-map "\C-j" nil)
     )
@@ -354,8 +357,29 @@ you should place your code here."
     (define-key org-mode-map "\C-k" nil)
     )
 
-  (setq geiser-racket-binary (expand-file-name "D:\\Racket\\Racket.exe"))
+  ;; scheme
+  (with-eval-after-load 'geiser-impl
+    (define-key geiser-repl-mode-map "\C-c" 'evil-normal-state)
+    (setq geiser-active-implementations '(racket))
+    (setq geiser-racket-binary (expand-file-name "D:\\Racket\\Racket.exe"))
+    '(add-to-list 'geiser-implementation-alist
+                  '((regexp "\\.scm$") racket))
+    )
+
+  ;; helm-ag
+  ;;  (with-eval-after-load 'helm-ag
+  ;;   (setq helm-ag-base-command
+                                        ;        "C:\\Users\\Win10\\Desktop\\emacs\\bin\\ag.exe --vimgrep"
+                                        ;        )
+                                        ;  )
   )
+
+(defun buffer-mode (&optional buffer-or-name)
+  "Returns the major mode associated with a buffer.
+If buffer-or-name is nil return current buffer's mode."
+  (interactive)
+  (buffer-local-value 'major-mode
+                      (if buffer-or-name (get-buffer buffer-or-name) (current-buffer))))
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
