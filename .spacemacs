@@ -37,7 +37,7 @@ values."
      ;; <M-m f e R> (Emacs style) to install them.
      ;; ----------------------------------------------------------------
      helm
-     ;; auto-completion
+     auto-completion
      ;; better-defaults
      emacs-lisp
      ;; git
@@ -146,13 +146,13 @@ values."
    ;; (default "SPC")
    dotspacemacs-emacs-command-key "SPC"
    ;; The key used for Vim Ex commands (default ":")
-   dotspacemacs-ex-command-key ":"
+   dotspacemacs-ex-command-key ";"
    ;; The leader key accessible in `emacs state' and `insert state'
    ;; (default "M-m")
    dotspacemacs-emacs-leader-key "M-m"
    ;; Major mode leader key is a shortcut key which is the equivalent of
    ;; pressing `<leader> m`. Set it to `nil` to disable it. (default ",")
-   dotspacemacs-major-mode-leader-key ","
+   dotspacemacs-major-mode-leader-key "C-M-m"
    ;; Major mode leader key accessible in `emacs state' and `insert state'.
    ;; (default "C-M-m")
    dotspacemacs-major-mode-emacs-leader-key "C-M-m"
@@ -311,7 +311,6 @@ before packages are loaded. If you are unsure, you should try in setting them in
           ("melpa" . "http://elpa.emacs-china.org/melpa/")
           ("org"   . "http://elpa.emacs-china.org/org/")
           ("gnu"   . "http://elpa.emacs-china.org/gnu/")))	
-  (linum-mode t)
   )
 
 (defun dotspacemacs/user-config ()
@@ -321,7 +320,7 @@ layers configuration.
 This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
-                                        ;  (define-key evil-insert-state-map (kbd "C-c") 'evil-force-normal-state)
+
   (define-key evil-normal-state-map "\M-g" (lambda()
                                              (interactive)
                                              (spacemacs/jump-to-definition)
@@ -329,17 +328,14 @@ you should place your code here."
                                              ))
   (define-key evil-normal-state-map "J" 'evil-scroll-down)
   (define-key evil-normal-state-map "K" 'evil-scroll-up)
-  (define-key evil-normal-state-map ";" 'evil-ex)
   (define-key evil-normal-state-map "\C-c" 'evil-force-normal-state)
-                                        ;(define-key evil-normal-state-map "\C--" 'evil-jump-backward)
-                                        ;(define-key evil-normal-state-map "\C-\=" 'evil-jump-forward)
-  ;; insert-mode
+  (define-key evil-normal-state-map "\C-o" 'evil-jump-backward)
+  (define-key evil-normal-state-map "\C-i" 'evil-jump-forward)
   (define-key evil-insert-state-map "\C-c" 'evil-normal-state)
-  ;; motion-mode
   (define-key evil-insert-state-map "\C-c" 'evil-normal-state)
-                                        ;  (global-set-key (kbd "\C-c") 'keyboard-quit)
   (define-key global-map "\C-j" nil)
   (define-key evil-insert-state-map "\C-j" nil)
+
   ;; 在语句上使用C-j直接执行
   (define-key evil-insert-state-map "\C-j" (lambda()
                                              (interactive)
@@ -348,13 +344,23 @@ you should place your code here."
     )
   (define-key evil-normal-state-map "\C-j" 'eval-print-last-sexp)
 
+  (define-key evil-normal-state-map "\C-d" 'browse-file-directory)
+  (define-key evil-insert-state-map "\C-d" 'browse-file-directory)
+
+  ;; avy
+  (with-eval-after-load 'emacs-lisp
+    (define-key emacs-lisp-mode "," nil)
+    )
+  (define-key spacemacs-emacs-lisp-mode-map "," 'undefined)
+  (define-key spacemacs-emacs-lisp-mode-map-prefix "," 'undefined)
+  (define-key evil-normal-state-map "," 'avy-goto-char)
 
   ;; org
   (with-eval-after-load 'org
     (define-key org-mode-map "\C-j" nil)
-    )
-  (with-eval-after-load 'org
     (define-key org-mode-map "\C-k" nil)
+    (define-key org-mode-map "\C-t" 'nil)
+    (define-key org-mode-map "\C-t" 'org-todo)
     )
 
   ;; scheme
@@ -367,12 +373,17 @@ you should place your code here."
     )
 
   ;; helm-ag
-  ;;  (with-eval-after-load 'helm-ag
-  ;;   (setq helm-ag-base-command
-                                        ;        "C:\\Users\\Win10\\Desktop\\emacs\\bin\\ag.exe --vimgrep"
-                                        ;        )
-                                        ;  )
+  (with-eval-after-load 'helm-ag
+    (setq helm-ag-base-command
+          "C:\\Users\\Win10\\Desktop\\emacs\\bin\\ag.exe --vimgrep"
+          )
+    )
+  ;; linum
+  (with-eval-after-load 'linum
+    (linum-mode t)
+    )
   )
+
 
 (defun buffer-mode (&optional buffer-or-name)
   "Returns the major mode associated with a buffer.
@@ -380,6 +391,13 @@ If buffer-or-name is nil return current buffer's mode."
   (interactive)
   (buffer-local-value 'major-mode
                       (if buffer-or-name (get-buffer buffer-or-name) (current-buffer))))
+
+(defun browse-file-directory ()
+  "Open the current file's directory however the OS would."
+  (interactive)
+  (if default-directory
+      (browse-url-of-file (expand-file-name default-directory))
+    (error "No `default-directory' to open")))
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
@@ -390,7 +408,7 @@ If buffer-or-name is nil return current buffer's mode."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (geiser org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download htmlize gnuplot auto-highlight-symbol auto-compile packed ace-link popup ws-butler winum volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint indent-guide hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-themes helm-swoop helm-projectile helm-mode-manager helm-make projectile pkg-info epl helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg eval-sexp-fu highlight elisp-slime-nav dumb-jump diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key ace-jump-helm-line helm helm-core which-key undo-tree hydra async aggressive-indent adaptive-wrap ace-window avy evil-unimpaired f s dash))))
+    (helm-company helm-c-yasnippet fuzzy company-statistics company auto-yasnippet yasnippet ac-ispell auto-complete geiser org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download htmlize gnuplot auto-highlight-symbol auto-compile packed ace-link popup ws-butler winum volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint indent-guide hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-themes helm-swoop helm-projectile helm-mode-manager helm-make projectile pkg-info epl helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg eval-sexp-fu highlight elisp-slime-nav dumb-jump diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key ace-jump-helm-line helm helm-core which-key undo-tree hydra async aggressive-indent adaptive-wrap ace-window avy evil-unimpaired f s dash))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

@@ -8,5 +8,5 @@ windows平台配置方法
 2、将.spacemacs中geiser-racket-binary改为drracket的racket.exe的路径
 测试：SPC SPC run-racket可以进入drracket的REPL
 
-3、将ag.exe放入system32
+3、将ag.exe放入system32，或者放入bin并配置.spacemacs的helm-ag-base-command
 测试：SPC s a f可以搜索到东西
