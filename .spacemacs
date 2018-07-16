@@ -333,6 +333,9 @@ you should place your code here."
   (define-key evil-normal-state-map "\C-i" 'evil-jump-forward)
   (define-key evil-insert-state-map "\C-c" 'evil-normal-state)
   (define-key evil-insert-state-map "\C-c" 'evil-normal-state)
+  (define-key evil-visual-state-map "\C-v" (lambda()(interactive)(clipboard-yank) (evil-normal-state-p)))
+  (define-key evil-insert-state-map "\C-v" (lambda()(interactive)(clipboard-yank) (evil-normal-state-p)))
+  (define-key evil-normal-state-map "\C-v" (lambda()(interactive)(clipboard-yank) (evil-normal-state-p)))
   (define-key global-map "\C-j" nil)
   (define-key evil-insert-state-map "\C-j" nil)
 
