@@ -329,6 +329,8 @@ you should place your code here."
                                              (evil-scroll-line-to-center (line-number-at-pos))
                                              ))
   (define-key evil-normal-state-map "J" 'evil-scroll-down)
+  (define-key compilation-mode-map "J" 'evil-scroll-down)
+  (define-key compilation-mode-map "K" 'evil-scroll-up)
   (define-key evil-normal-state-map "K" 'evil-scroll-up)
   (define-key evil-normal-state-map "\C-c" 'evil-force-normal-state)
   (define-key evil-normal-state-map "\C-o" 'evil-jump-backward)
@@ -410,6 +412,9 @@ you should place your code here."
 ;  (add-hook 'emacs-lisp-mode-hook 'neotree-show)
   (add-hook 'haskell-mode-hook 'show-line-number)
 ;  (add-hook 'haskell-mode-hook 'neotree-show)
+
+
+;  (spacemacs/set-leader-keys "mb" ')
   )
 
 
