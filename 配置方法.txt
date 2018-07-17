@@ -11,5 +11,5 @@ windows平台配置方法
 3、将ag.exe放入system32，或者放入bin并配置.spacemacs的helm-ag-base-command
 测试：SPC s a f可以搜索到东西
 
-4、右键菜单显示在emacs中打开，将emacs.reg中的路径改为emacs/bin路径
-测试：右键菜单中有在emacs中打开
+4、右键菜单显示在emacs中打开将emacs.reg中的路径改为emacs/bin路径；删除.emacs.d中的Server文件夹
+测试：右键菜单中有在emacs中打开，可以选择在现有frame中打开或在新frame中打开
