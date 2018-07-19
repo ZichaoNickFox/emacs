@@ -329,8 +329,8 @@ you should place your code here."
                                              (evil-scroll-line-to-center (line-number-at-pos))
                                              ))
   (define-key evil-normal-state-map "J" 'evil-scroll-down)
-  (define-key compilation-mode-map "J" 'evil-scroll-down)
-  (define-key compilation-mode-map "K" 'evil-scroll-up)
+;  (define-key compilation-mode-map "J" 'evil-scroll-down)
+;  (define-key compilation-mode-map "K" 'evil-scroll-up)
   (define-key evil-normal-state-map "K" 'evil-scroll-up)
   (define-key evil-normal-state-map "\C-c" 'evil-force-normal-state)
   (define-key evil-normal-state-map "\C-o" 'evil-jump-backward)
@@ -352,6 +352,10 @@ you should place your code here."
 
   (define-key evil-normal-state-map "\C-d" 'browse-file-directory)
   (define-key evil-insert-state-map "\C-d" 'browse-file-directory)
+
+  (define-key evil-insert-state-map "\C-s" 'save-buffer)
+  (define-key evil-normal-state-map "\C-s" 'save-buffer)
+  (define-key evil-visual-state-map "\C-s" 'save-buffer)
 
   ;; avy
   (with-eval-after-load 'emacs-lisp
